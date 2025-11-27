@@ -151,9 +151,9 @@ export function SwipeCard({
       role="article"
     >
       <Box className="w-full h-full">
-        <Card className="w-full max-h-[84dvh] h-[550px] overflow-hidden flex flex-col bg-black dark:bg-black shadow-xl mt-[env(safe-area-inset-top)] border-gray-800 dark:border-gray-800">
-          {/* Image Section */}
-          <Box className="relative w-full h-[250px] bg-muted pt-[env(safe-area-inset-top)]">
+        <Card className="w-full max-h-[84dvh] h-[550px] overflow-hidden flex flex-col bg-card shadow-xl mt-[env(safe-area-inset-top)] border-border">
+          {/* Image Section - Reduced height ratio (approx 40%) */}
+          <Box className="relative w-full h-[200px] bg-muted shrink-0">
             <Image
               src={image}
               alt={title}
@@ -164,68 +164,61 @@ export function SwipeCard({
                 const target = e.target as HTMLImageElement;
                 if (target.src !== DEFAULT_IMAGE) {
                   target.src = DEFAULT_IMAGE;
-                  // Keep object-cover for the default image so it fills the area
                   target.className = "absolute inset-0 w-full h-full object-cover z-0 opacity-50";
                 }
               }}
             />
 
-            {/* Updated gradient overlay with conditional intensity */}
-            <div
-              className={cn(
-                "absolute inset-0 bg-gradient-to-b pointer-events-none z-[1]",
-                image === DEFAULT_IMAGE
-                  ? "from-black/40 via-black/20 to-black/60" // lighter gradient for default image
-                  : "from-black/80 via-black/40 to-black/90" // original gradient for normal images
-              )}
-            />
+            {/* Removed dark gradient overlay for clarity */}
 
-            {/* Source at the top */}
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute top-0 right-0 p-4 z-[3] flex items-center gap-2 text-white/60 hover:text-white/90 transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Avatar className="w-5 h-5">
-                <AvatarImage src={googleFaviconUrl} alt={cleanHost} />
-                <AvatarFallback className="text-[10px] bg-primary/10">
-                  {cleanHost.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium">{cleanHost}</span>
-            </a>
+            {/* Source badge moved to top-right, distinct from image content */}
+            <div className="absolute top-3 right-3 z-[3]">
+              <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm hover:bg-background/90 text-foreground gap-1.5 pl-1.5 pr-2.5 py-1">
+                <Avatar className="w-4 h-4">
+                  <AvatarImage src={googleFaviconUrl} alt={cleanHost} />
+                  <AvatarFallback className="text-[8px]">
+                    {cleanHost.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-xs font-medium">{cleanHost}</span>
+              </Badge>
+            </div>
+          </Box>
 
-            <CardHeader className="absolute bottom-0 text-white pointer-events-none px-6 pb-6 z-[2] w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent">
+          {/* Content Section - Increased space for text (approx 60%) */}
+          <Stack className="flex-1 overflow-hidden bg-card" gap="sm">
+            <CardHeader className="px-6 pt-5 pb-2">
+              {/* Date moved above title for context/timeline establishment */}
+              <div className="flex items-center gap-2 mb-2">
+                <time dateTime={date} className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {new Date(date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                  })}
+                </time>
+                <span className="text-xs text-muted-foreground/50">•</span>
+                <span className="text-xs text-muted-foreground font-medium">News</span>
+              </div>
+
               <h2
                 className={cn(
                   getTitleSizeClass(title),
-                  "font-semibold leading-snug",
+                  "font-bold leading-tight text-foreground tracking-tight",
                   "line-clamp-3"
                 )}
               >
                 {title}
               </h2>
             </CardHeader>
-          </Box>
 
-          {/* Content Section */}
-          <Stack className="flex-1 overflow-hidden" gap="none">
-            <CardContent className="flex-grow py-6 px-6 relative -mt-2 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              <p className="text-sm leading-relaxed text-gray-200 dark:text-gray-200 tracking-normal">
-                <time dateTime={date} className="font-semibold text-gray-300">
-                  {new Date(date).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </time>
-                &nbsp;&middot;&nbsp;
+            <CardContent className="flex-grow px-6 py-0 relative overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              <p className="text-base leading-relaxed text-muted-foreground">
                 {content}
               </p>
             </CardContent>
 
-            <CardFooter className="mt-auto pt-2 flex items-center justify-between gap-2">
+            <CardFooter className="mt-auto pt-4 pb-6 px-6 flex items-center justify-between gap-2 border-t border-border/50 bg-muted/20">
               {showBack && (
                 <Button
                   variant="ghost"
@@ -234,44 +227,32 @@ export function SwipeCard({
                     e.stopPropagation();
                     onBack?.();
                   }}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground -ml-2"
                 >
-                  <StepBack className="w-4 h-4" />
+                  <StepBack className="w-4 h-4 mr-1.5" />
                   Back
                 </Button>
               )}
               <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                 <Badge
-                  variant="secondary"
-                  className="cursor-pointer ml-auto gap-1 bg-primary/10 text-primary hover:bg-primary/20"
+                  variant="outline"
+                  className="cursor-pointer ml-auto gap-1.5 py-1.5 px-3 hover:bg-accent transition-colors border-primary/20 text-primary"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSheetOpen(true);
                   }}
                 >
-                  AI Insights
+                  <span className="font-medium">AI Insights</span>
                   <svg
                     width="14"
                     height="14"
                     viewBox="0 0 24 24"
-                    className="[&>path]:stroke-[url(#ai-gradient)]"
+                    className="stroke-primary"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    fill="none"
                   >
-                    <defs>
-                      <linearGradient
-                        id="ai-gradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" style={{ stopColor: "#FF3366" }} />
-                        <stop offset="50%" style={{ stopColor: "#8B5CF6" }} />
-                        <stop offset="100%" style={{ stopColor: "#0EA5E9" }} />
-                      </linearGradient>
-                    </defs>
                     <path d="M12 3l1.912 5.813a2 2 0 001.272 1.272L21 12l-5.813 1.912a2 2 0 00-1.272 1.272L12 21l-1.912-5.813a2 2 0 00-1.272-1.272L3 12l5.813-1.912a2 2 0 001.272-1.272L12 3z" />
                   </svg>
                 </Badge>
@@ -299,16 +280,18 @@ export function SwipeCard({
                           />
                         </div>
 
-                        <h1 className="text-3xl font-extrabold tracking-tight mb-3 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">{title}</h1>
+                        <h1 className="text-3xl font-extrabold tracking-tight mb-3 text-foreground">{title}</h1>
 
-                        <div className="not-prose flex items-center gap-3 text-sm text-muted-foreground">
+                        <div className="not-prose flex items-center gap-3 text-sm text-muted-foreground mb-6">
                           <time className="font-medium bg-secondary px-2 py-0.5 rounded-md">
-                            {new Date().toLocaleDateString("en-US", {
+                            {new Date(date).toLocaleDateString("en-US", {
                               month: "short",
                               day: "numeric",
                               year: "numeric"
                             })}
                           </time>
+                          <span>•</span>
+                          <span className="font-medium">{cleanHost}</span>
                         </div>
 
                         <a
