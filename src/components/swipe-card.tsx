@@ -66,14 +66,14 @@ export function SwipeCard({
   const handlers = useSwipeable({
     onSwiping: (e: SwipeEventData) => {
       if (!isTop) return;
-      
+
       const deltaX = e.deltaX;
       const absX = Math.abs(deltaX);
-      
+
       // Calculate scale and rotation based on swipe distance
       const scale = Math.max(0.8, 1 - absX / 1000);
       const rotate = (deltaX / 200) * 15; // Max rotation of 15 degrees
-      
+
       setTransform({
         x: deltaX,
         scale,
@@ -82,17 +82,17 @@ export function SwipeCard({
     },
     onSwiped: (e: SwipeEventData) => {
       if (!isTop) return;
-      
+
       const threshold = 0.4;
       const velocity = Math.abs(e.velocity);
       const deltaX = Math.abs(e.deltaX);
       const screenWidth = window.innerWidth;
       const swipePercentage = deltaX / (screenWidth * 0.4);
-      
+
       const velocityContribution = Math.min(velocity / 2, threshold * 1.2);
       const distanceContribution = swipePercentage;
       const swipeComplete = velocityContribution + distanceContribution > threshold;
-      
+
       if (swipeComplete) {
         const direction = e.deltaX > 0 ? "right" : "left";
         handleSwipe(direction);
@@ -150,17 +150,17 @@ export function SwipeCard({
         <Card className="w-full max-h-[84dvh] h-[550px] overflow-hidden flex flex-col bg-card shadow-xl mt-[env(safe-area-inset-top)]">
           {/* Image Section */}
           <div className="relative w-full h-[250px] bg-muted pt-[env(safe-area-inset-top)]">
-            <Image
+            <img
               src={image}
               alt={title}
-              fill
-              priority
-              sizes="(max-width: 400px) 100vw"
-              className="object-cover z-0"
+              className="absolute inset-0 w-full h-full object-cover z-0"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = DEFAULT_IMAGE;
-                target.className = "w-16 h-16 opacity-50";
+                if (target.src !== DEFAULT_IMAGE) {
+                  target.src = DEFAULT_IMAGE;
+                  // Keep object-cover for the default image so it fills the area
+                  target.className = "absolute inset-0 w-full h-full object-cover z-0 opacity-50";
+                }
               }}
             />
 
@@ -215,7 +215,7 @@ export function SwipeCard({
                   })}
                 </time>
                 &nbsp;&middot;&nbsp;
-                {content.length > 370 ? `${content.slice(0, 370)}...` : content}
+                {content}
               </p>
             </CardContent>
 

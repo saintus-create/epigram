@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { IOSHandler } from "@/components/ios-handler";
+import { ShadcnBackground } from "@/components/shadcn-background";
 import Script from "next/script";
 
 export const viewport: Viewport = {
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   description:
     "An open-source, AI-powered news app for busy people. Stay updated with bite-sized news, real-time updates, and in-depth analysis. Experience balanced, trustworthy reporting tailored for fast-paced lifestyles in a sleek, user-friendly interface.",
   manifest: "/manifest.json",
-  metadataBase: new URL(process.env.BASE_URL!),
+  metadataBase: new URL(process.env.BASE_URL || 'https://epigram.news'),
   alternates: {
     canonical: "/",
   },
@@ -114,6 +115,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <IOSHandler />
+          <ShadcnBackground />
           {children}
         </ThemeProvider>
       </body>

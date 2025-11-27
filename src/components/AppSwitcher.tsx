@@ -3,15 +3,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  Check, Moon, Monitor, Sun, Tags, 
-  Scroll, Eye, Leaf, Waves,
-  Sparkles, Flame, Star, Menu,
-  Info, Share2, 
+import {
+  Check, Moon, Monitor, Sun, Scroll, Eye, Leaf, Waves,
+  Sparkles, Flame, Star,
+
+  Share2,
   Twitter, Linkedin, Facebook, MessageCircle,
-  Github, X, Search,
+  X, Search,
   TreePalm,
-  Flower2
+  Flower2,
+  Home
 } from 'lucide-react';
 import { LogoIcon } from '@/components/logo-icon';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -31,35 +32,35 @@ const SOCIAL_CONFIGS = [
   {
     name: 'X (Twitter)',
     icon: <Twitter className="w-5 h-5" />,
-    urlTemplate: (text: string, url: string) => 
+    urlTemplate: (text: string, url: string) =>
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
     color: 'hover:bg-[#1DA1F2]/10 group-hover:text-[#1DA1F2]'
   },
   {
     name: 'LinkedIn',
     icon: <Linkedin className="w-5 h-5" />,
-    urlTemplate: (_: string, url: string) => 
+    urlTemplate: (_: string, url: string) =>
       `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
     color: 'hover:bg-[#0A66C2]/10 group-hover:text-[#0A66C2]'
   },
   {
     name: 'Facebook',
     icon: <Facebook className="w-5 h-5" />,
-    urlTemplate: (_: string, url: string) => 
+    urlTemplate: (_: string, url: string) =>
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
     color: 'hover:bg-[#1877F2]/10 group-hover:text-[#1877F2]'
   },
   {
     name: 'WhatsApp',
     icon: <WhatsAppIcon className="w-5 h-5" />,
-    urlTemplate: (text: string, url: string) => 
+    urlTemplate: (text: string, url: string) =>
       `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`,
     color: 'hover:bg-[#25D366]/10 group-hover:text-[#25D366]'
   },
   {
     name: 'Messages',
     icon: <MessageCircle className="w-5 h-5" />,
-    urlTemplate: (text: string, url: string) => 
+    urlTemplate: (text: string, url: string) =>
       `sms:&body=${encodeURIComponent(text + ' ' + url)}`,
     color: 'hover:bg-blue-500/10 group-hover:text-blue-500'
   }
@@ -69,8 +70,8 @@ const AppSwitcher: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const isHomePage = pathname === '/';
-  const isTopicsPage = pathname === '/topics';
-  const isAboutPage = pathname === '/about';
+
+
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -88,11 +89,11 @@ const AppSwitcher: React.FC = () => {
     localStorage.setItem('hasSeenWelcome', 'true');
   };
 
-  const shareLinks = useMemo(() => 
+  const shareLinks = useMemo(() =>
     SOCIAL_CONFIGS.map(config => ({
       ...config,
       url: config.urlTemplate(SHARE_TEXT, SHARE_URL)
-    })), 
+    })),
     []
   );
 
@@ -118,7 +119,7 @@ const AppSwitcher: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <LogoIcon className="w-5 h-5" />
-                    <h3 className="font-semibold">Welcome to Epigram!</h3>
+                    <h3 className="font-semibold">Welcome to the news</h3>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Your open-source, AI-powered news companion that redefines
@@ -149,43 +150,31 @@ const AppSwitcher: React.FC = () => {
         </>
       )}
 
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10 pb-[env(safe-area-inset-bottom)]">
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4">
         <nav
-          className="bg-white dark:bg-card backdrop-blur-md rounded-full shadow-lg border border-gray-200/50 dark:border-gray-800"
+          className="bg-transparent"
           role="navigation"
           aria-label="Main navigation"
         >
-          <div className="flex items-center h-11 px-2 gap-2">
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a
-              href="/"
-              className={cn(
-                "p-1.5 rounded-full transition-colors flex items-center gap-2",
-                isHomePage && "bg-primary text-primary-foreground",
-                !isHomePage && "hover:bg-gray-100 dark:hover:bg-muted"
-              )}
-              aria-label="Go to Epigram"
-              aria-current={isHomePage ? "page" : undefined}
-            >
-              <LogoIcon className="w-5 h-5" />
-              <span className="font-medium text-sm">Epigram</span>
-            </a>
+          <div className="flex items-center gap-6">
 
-            <Link href="/topics">
+
+
+            {/* Home button */}
+            <Link href="/">
               <button
                 className={cn(
-                  "p-1.5 rounded-full transition-colors flex items-center gap-2",
-                  isTopicsPage
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-gray-100 dark:hover:bg-muted"
+                  "p-1.5 rounded-full transition-colors flex items-center",
+                  isHomePage && "bg-primary text-primary-foreground",
+                  !isHomePage && "hover:bg-gray-100 dark:hover:bg-muted"
                 )}
-                aria-label="Go to topics page"
-                aria-current={isTopicsPage ? "page" : undefined}
+                aria-label="Home"
+                aria-current={isHomePage ? "page" : undefined}
               >
-                <Tags className="w-5 h-5" />
-                <span className="font-medium text-sm">Topics</span>
+                <Home className="w-5 h-5" />
               </button>
             </Link>
+
 
             <TooltipProvider>
               <Tooltip>
@@ -412,66 +401,16 @@ const AppSwitcher: React.FC = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button
-                        className="p-1.5 hover:bg-gray-100 dark:hover:bg-muted rounded-full transition-colors"
-                        aria-label="More options"
-                      >
-                        <Menu className="w-5 h-5" />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      align="end"
-                      className="w-56"
-                      role="menu"
-                      aria-label="More options"
-                    >
-                      <Link href="/about">
-                        <DropdownMenuItem
-                          className={cn(
-                            "h-9 focus:bg-accent cursor-pointer",
-                            isAboutPage && "bg-accent"
-                          )}
-                        >
-                          <Info className="mr-2 h-4 w-4" aria-hidden="true" />
-                          <span className="flex-1">About</span>
-                          {isAboutPage && (
-                            <Check className="h-4 w-4" aria-hidden="true" />
-                          )}
-                        </DropdownMenuItem>
-                      </Link>
-                      <a
-                        href="https://github.com/panda-sandeep/epigram"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <DropdownMenuItem className="h-9 focus:bg-accent cursor-pointer">
-                          <Github className="mr-2 h-4 w-4" aria-hidden="true" />
-                          <span className="flex-1">Contribute and fork</span>
-                        </DropdownMenuItem>
-                      </a>
-                      <DropdownMenuItem
-                        className="h-9 focus:bg-accent cursor-pointer"
-                        onClick={() => setIsShareOpen(true)}
-                      >
-                        <Share2 className="mr-2 h-4 w-4" aria-hidden="true" />
-                        <span className="flex-1">Share Epigram</span>
-                      </DropdownMenuItem>
-                      <div className="h-px bg-border my-1" />
-                      <div className="px-2 py-3 space-y-1">
-                        <div className="text-xs text-center text-muted-foreground">
-                          Built by humans, optimized by AI, with ❤️ from SF.
-                        </div>
-                        <div className="text-[10px] text-center text-muted-foreground/60">
-                          © {new Date().getFullYear()} Epigram
-                        </div>
-                      </div>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <button
+                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-muted rounded-full transition-colors"
+                    onClick={() => setIsShareOpen(true)}
+                    aria-label="Share"
+                  >
+                    <Share2 className="w-5 h-5" />
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>More options</p>
+                  <p>Share</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -483,9 +422,9 @@ const AppSwitcher: React.FC = () => {
         <DrawerContent>
           <div className="mx-auto max-w-lg w-full">
             <DrawerHeader>
-              <DrawerTitle className="text-center">Share Epigram</DrawerTitle>
+              <DrawerTitle className="text-center">Share</DrawerTitle>
               <DrawerDescription className="text-center">
-                Share Epigram with your friends and colleagues
+                Share with your friends and colleagues
               </DrawerDescription>
             </DrawerHeader>
             <div className="flex justify-center gap-4 p-4">

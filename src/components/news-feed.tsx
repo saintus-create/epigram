@@ -6,6 +6,7 @@ import AppSwitcher from "@/components/AppSwitcher";
 import { NewsArticle } from "@/types/newsArticle";
 import { ArrowLeftRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function NewsFeed({ newsArticles }: { newsArticles: NewsArticle[] }) {
   const [cards, setCards] = useState(newsArticles);
@@ -46,7 +47,7 @@ export default function NewsFeed({ newsArticles }: { newsArticles: NewsArticle[]
 
   return (
     <>
-      <div className="fixed inset-0 pt-4 pb-10 px-4">
+      <div className="fixed inset-0 pt-24 pb-10 px-4">
         <div className="relative w-full max-w-[400px] mx-auto h-full perspective-1000">
           {/* Swipe tip */}
           {showTip && cards.length > 0 && (
@@ -90,32 +91,47 @@ export default function NewsFeed({ newsArticles }: { newsArticles: NewsArticle[]
               <p className="text-muted-foreground">You have caught up with all news for now.</p>
             </div>
           ) : (
-            cards.slice(0, 3).map((card, index) => (
-              <div
-                key={card.id}
-                className="absolute inset-0"
-                style={{
-                  transform: `translateY(${index * 8}px)`,
-                  zIndex: 3 - index,
-                  opacity: index === 2 ? 0.3 : 1,
-                  width: `${100 - (index * 4)}%`,
-                  margin: '0 auto'
-                }}
-              >
-                <SwipeCard
-                  title={card.title}
-                  content={card.summary}
-                  date={card.publishedDate}
-                  image={card.image}
-                  favicon={card.favicon}
-                  url={card.url}
-                  isTop={index === 0}
-                  onSwipe={() => handleSwipe(card.id)}
-                  onBack={handleUndo}
-                  showBack={index === 0 && dismissedCards.length > 0}
-                />
-              </div>
-            ))
+            <AnimatePresence mode="popLayout">
+              {cards.slice(0, 3).map((card, index) => (
+                <motion.div
+                  key={card.id}
+                  className="absolute inset-0"
+                  initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                  animate={{
+                    scale: 1 - index * 0.05,
+                    y: index * 15,
+                    zIndex: 3 - index,
+                    opacity: 1 - index * 0.2,
+                  }}
+                  exit={{
+                    x: -300,
+                    opacity: 0,
+                    rotate: -20,
+                    transition: { duration: 0.4, ease: "easeInOut" }
+                  }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  style={{
+                    width: `${100 - (index * 5)}%`,
+                    margin: '0 auto',
+                    left: 0,
+                    right: 0,
+                  }}
+                >
+                  <SwipeCard
+                    title={card.title}
+                    content={card.summary}
+                    date={card.publishedDate}
+                    image={card.image}
+                    favicon={card.favicon}
+                    url={card.url}
+                    isTop={index === 0}
+                    onSwipe={() => handleSwipe(card.id)}
+                    onBack={handleUndo}
+                    showBack={index === 0 && dismissedCards.length > 0}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           )}
         </div>
       </div>

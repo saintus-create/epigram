@@ -16,6 +16,8 @@ html {
 
 body {
   @apply bg-background text-foreground relative;
+  font-family: 'Geist', sans-serif;
+  letter-spacing: normal;
   min-height: 100vh;
   min-height: -webkit-fill-available;
   padding: var(--sat) env(safe-area-inset-right) var(--sab) env(safe-area-inset-left);
@@ -433,6 +435,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
