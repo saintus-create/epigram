@@ -150,10 +150,12 @@ export function SwipeCard({
         <Card className="w-full max-h-[84dvh] h-[550px] overflow-hidden flex flex-col bg-card shadow-xl mt-[env(safe-area-inset-top)]">
           {/* Image Section */}
           <div className="relative w-full h-[250px] bg-muted pt-[env(safe-area-inset-top)]">
-            <img
+            <Image
               src={image}
               alt={title}
-              className="absolute inset-0 w-full h-full object-cover z-0"
+              fill
+              sizes="100vw"
+              className="object-cover z-0"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 if (target.src !== DEFAULT_IMAGE) {
