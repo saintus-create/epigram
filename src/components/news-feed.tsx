@@ -119,7 +119,7 @@ export default function NewsFeed({ newsArticles }: { newsArticles: NewsArticle[]
                 >
                   <SwipeCard
                     title={card.title}
-                    content={card.summary}
+                    content={card.text}
                     date={card.publishedDate}
                     image={card.image}
                     favicon={card.favicon}

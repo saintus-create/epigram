@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const TOPICS = [
   "General",
+  "News",
   "Business",
   "Entertainment",
   "Health",
@@ -39,12 +40,12 @@ const TopicsList = () => {
       } else {
         newTopics.add(topic);
       }
-      
+
       // Save to cookies
       document.cookie = `${COOKIE_NAME}=${encodeURIComponent(
         JSON.stringify(Array.from(newTopics))
       )}; path=/; max-age=${COOKIE_MAX_AGE}`;
-      
+
       return newTopics;
     });
   };
@@ -57,7 +58,7 @@ const TopicsList = () => {
           Choose the news topics you&apos;re interested in. We&apos;ll personalize your feed based on your selections.
         </p>
       </div>
-      
+
       <div className="h-[calc(100%-48px)] overflow-y-auto">
         <div className="flex flex-wrap gap-2">
           {TOPICS.map((topic) => {

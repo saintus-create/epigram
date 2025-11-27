@@ -139,7 +139,7 @@ const AppSwitcher: React.FC = () => {
                         onClick={dismissWelcome}
                         className="flex-1 py-1 px-3 bg-secondary text-secondary-foreground rounded-full hover:opacity-90 transition-opacity whitespace-nowrap"
                       >
-                        About Epigram
+                        About
                       </button>
                     </Link>
                   </div>

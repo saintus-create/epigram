@@ -15,10 +15,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title:
-    "Epigram: Open-Source, Free, and AI-Powered News in Short.",
-  description:
-    "An open-source, AI-powered news app for busy people. Stay updated with bite-sized news, real-time updates, and in-depth analysis. Experience balanced, trustworthy reporting tailored for fast-paced lifestyles in a sleek, user-friendly interface.",
+  title: "News Feed",
+  description: "A sleek, AI-powered news feed delivering concise updates for busy readers.",
   manifest: "/manifest.json",
   metadataBase: new URL(process.env.BASE_URL || 'https://epigram.news'),
   alternates: {
@@ -27,20 +25,18 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Epigram",
+    title: "News Feed",
   },
   openGraph: {
-    title: "Epigram: Open-Source, Free, and AI-Powered News in Short.",
-    description:
-      "An open-source, AI-powered news app for busy people. Stay updated with bite-sized news, real-time updates, and in-depth analysis. Experience balanced, trustworthy reporting tailored for fast-paced lifestyles in a sleek, user-friendly interface.",
-    images: [{ url: "/static/images/epigram-og.png" }],
+    title: "News Feed",
+    description: "A sleek, AI-powered news feed delivering concise updates for busy readers.",
+    images: [],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Epigram: Open-Source, Free, and AI-Powered News in Short.",
-    description:
-      "An open-source, AI-powered news app for busy people. Stay updated with bite-sized news, real-time updates, and in-depth analysis. Experience balanced, trustworthy reporting tailored for fast-paced lifestyles in a sleek, user-friendly interface.",
-    images: ["/static/images/epigram-og.png"],
+    title: "News Feed",
+    description: "A sleek, AI-powered news feed delivering concise updates for busy readers.",
+    images: [],
   },
   icons: {
     icon: [

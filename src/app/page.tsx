@@ -31,8 +31,8 @@ export default async function Home() {
     const response = await fetch('https://news.google.com/rss/search?q=political+protests+italy+anti-government+demonstration+world&hl=en-US&gl=US&ceid=US:en', { next: { revalidate: 3600 } });
     const text = await response.text();
 
-    // Simple XML parsing
-    const items = text.match(/<item>[\s\S]*?<\/item>/g) || [];
+    // Simple XML parsing with robust regex for <item> elements
+    const items = text.match(/<item[^>]*>[\s\S]*?<\/item>/g) || [];
 
     newsArticles = items.slice(0, 10).map((item, index) => {
       const titleMatch = item.match(/<title>(.*?)<\/title>/);
@@ -82,13 +82,20 @@ export default async function Home() {
         }
       })();
       const favicon = `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+      const publishedDate = (() => {
+        try {
+          return pubDateMatch ? new Date(pubDateMatch[1]).toISOString() : new Date().toISOString();
+        } catch {
+          return new Date().toISOString();
+        }
+      })();
       return {
         id: `news-${index}`,
         title: title.replace("<![CDATA[", "").replace("]]>", ""),
         summary: summary.replace("<![CDATA[", "").replace("]]>", "").slice(0, 200) + "...",
         text: summary,
         url: linkMatch ? linkMatch[1] : '#',
-        publishedDate: pubDateMatch ? new Date(pubDateMatch[1]).toISOString() : new Date().toISOString(),
+        publishedDate: publishedDate,
         image: image,
         favicon: favicon,
       };

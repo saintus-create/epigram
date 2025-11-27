@@ -16,6 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { AIInsight } from "./ai-insight";
 import { XIcon } from "@/components/icons/x-icon";
+import { Box } from "@/components/layout/box";
+import { Stack } from "@/components/layout/stack";
+import { Badge } from "@/components/ui/badge";
+import { FadeIn } from "@/components/motion/fade-in";
 
 interface SwipeCardProps {
   title: string;
@@ -40,7 +44,7 @@ function getTitleSizeClass(title: string): string {
   }
 }
 
-const DEFAULT_IMAGE = '/static/images/default.png';
+const DEFAULT_IMAGE = '';
 
 export function SwipeCard({
   title,
@@ -146,10 +150,10 @@ export function SwipeCard({
       aria-label="News card"
       role="article"
     >
-      <div className="w-full h-full">
-        <Card className="w-full max-h-[84dvh] h-[550px] overflow-hidden flex flex-col bg-card shadow-xl mt-[env(safe-area-inset-top)]">
+      <Box className="w-full h-full">
+        <Card className="w-full max-h-[84dvh] h-[550px] overflow-hidden flex flex-col bg-black dark:bg-black shadow-xl mt-[env(safe-area-inset-top)] border-gray-800 dark:border-gray-800">
           {/* Image Section */}
-          <div className="relative w-full h-[250px] bg-muted pt-[env(safe-area-inset-top)]">
+          <Box className="relative w-full h-[250px] bg-muted pt-[env(safe-area-inset-top)]">
             <Image
               src={image}
               alt={title}
@@ -204,13 +208,13 @@ export function SwipeCard({
                 {title}
               </h2>
             </CardHeader>
-          </div>
+          </Box>
 
           {/* Content Section */}
-          <div className="flex flex-col flex-1 overflow-hidden">
-            <CardContent className="flex-grow py-6 px-6 relative -mt-2 overflow-y-auto pointer-events-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              <p className="text-sm leading-normal text-gray-700 dark:text-gray-300 tracking-normal select-none">
-                <time dateTime={date} className="font-medium">
+          <Stack className="flex-1 overflow-hidden" gap="none">
+            <CardContent className="flex-grow py-6 px-6 relative -mt-2 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              <p className="text-sm leading-relaxed text-gray-200 dark:text-gray-200 tracking-normal">
+                <time dateTime={date} className="font-semibold text-gray-300">
                   {new Date(date).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -237,13 +241,13 @@ export function SwipeCard({
                 </Button>
               )}
               <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-                <Button
-                  variant="outline"
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer ml-auto gap-1 bg-primary/10 text-primary hover:bg-primary/20"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSheetOpen(true);
                   }}
-                  className="ml-auto"
                 >
                   AI Insights
                   <svg
@@ -270,62 +274,65 @@ export function SwipeCard({
                     </defs>
                     <path d="M12 3l1.912 5.813a2 2 0 001.272 1.272L21 12l-5.813 1.912a2 2 0 00-1.272 1.272L12 21l-1.912-5.813a2 2 0 00-1.272-1.272L3 12l5.813-1.912a2 2 0 001.272-1.272L12 3z" />
                   </svg>
-                </Button>
+                </Badge>
                 <SheetContent
                   side="bottom"
                   className="h-[calc(92dvh-env(safe-area-inset-top))] sm:h-[calc(94dvh-env(safe-area-inset-top))] pb-safe overflow-y-auto"
                 >
                   <SheetTitle className="sr-only">Article Details</SheetTitle>
-                  <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
-                    <article className="prose prose-slate dark:prose-invert prose-headings:font-bold prose-h1:text-2xl prose-h2:text-xl prose-p:text-base prose-img:rounded-lg max-w-none">
-                      <div className="not-prose relative w-full aspect-[2/1] mb-6 rounded-lg overflow-hidden bg-muted">
-                        <Image
-                          src={image}
-                          alt={title}
-                          fill
-                          priority
-                          sizes="(max-width: 768px) 100vw, 768px"
-                          className="object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = DEFAULT_IMAGE;
-                            target.className = "w-16 h-16 opacity-50";
-                          }}
-                        />
-                      </div>
+                  <FadeIn duration={0.4}>
+                    <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+                      <article className="prose prose-slate dark:prose-invert prose-headings:font-bold prose-h1:text-2xl prose-h2:text-xl prose-p:text-base prose-img:rounded-lg max-w-none">
+                        <div className="not-prose relative w-full aspect-[2/1] mb-6 rounded-lg overflow-hidden bg-muted">
+                          <Image
+                            src={image}
+                            alt={title}
+                            fill
+                            priority
+                            sizes="(max-width: 768px) 100vw, 768px"
+                            className="object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = DEFAULT_IMAGE;
+                              target.className = "w-16 h-16 opacity-50";
+                            }}
+                          />
+                        </div>
 
-                      <h1 className="text-3xl font-extrabold tracking-tight mb-3 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">{title}</h1>
+                        <h1 className="text-3xl font-extrabold tracking-tight mb-3 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">{title}</h1>
 
-                      <div className="not-prose flex items-center gap-3 text-sm text-muted-foreground">
-                        <time className="font-medium bg-secondary px-2 py-0.5 rounded-md">
-                          {new Date().toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </time>
-                      </div>
+                        <div className="not-prose flex items-center gap-3 text-sm text-muted-foreground">
+                          <time className="font-medium bg-secondary px-2 py-0.5 rounded-md">
+                            {new Date().toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric"
+                            })}
+                          </time>
+                        </div>
 
-                      <a
-                        href={`https://x.com/search?q=${encodeURIComponent(
-                          title
-                        )}&f=live`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="not-prose mt-4 mb-6 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-medium text-sm transition-all"
-                      >
-                        <span>See discussion on</span>
-                        <XIcon className="w-4 h-4" />
-                      </a>
+                        <a
+                          href={`https://x.com/search?q=${encodeURIComponent(
+                            title
+                          )}&f=live`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="not-prose mt-4 mb-6 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-medium text-sm transition-all"
+                        >
+                          <span>See discussion on</span>
+                          <XIcon className="w-4 h-4" />
+                        </a>
 
-                      {sheetOpen && <AIInsight query={title} />}
-                    </article>
-                  </div>
+                        {sheetOpen && <AIInsight query={title} />}
+                      </article>
+                    </div>
+                  </FadeIn>
                 </SheetContent>
               </Sheet>
             </CardFooter>
-          </div>
+          </Stack>
         </Card>
-      </div>
+      </Box>
     </div>
   );
 }
