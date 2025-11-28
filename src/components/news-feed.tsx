@@ -3,7 +3,7 @@
 import { SwipeCard } from "@/components/swipe-card";
 import { useState, useEffect } from "react";
 import AppSwitcher from "@/components/AppSwitcher";
-import { NewsArticle } from "@/types/newsArticle";
+import { NewsArticle } from "@/lib/validators/news";
 import { ArrowLeftRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";

@@ -5,7 +5,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import redis from '@/modules/redis';
-import { NewsArticle } from '@/types/newsArticle';
+import { NewsArticle } from '@/lib/validators/news';
 import { getContents } from '@/modules/exa';
 
 const topics = ['general', 'business', 'entertainment', 'health', 'science', 'sports', 'technology'];

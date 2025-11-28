@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import redis from '@/modules/redis';
-import { NewsArticle } from '@/types/newsArticle';
+import { NewsArticle } from '@/lib/validators/news';
 
 const getUniqueArticlesBy = <K extends keyof NewsArticle>(arr: NewsArticle[], key: K) => {
     return arr.filter(

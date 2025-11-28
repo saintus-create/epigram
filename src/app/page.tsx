@@ -1,7 +1,6 @@
 import NewsFeed from "@/components/news-feed";
-import { NewsArticle } from "@/types/newsArticle";
+import { NewsArticle, parseNewsArticles } from "@/lib/validators/news";
 import Exa from "exa-js";
-
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -21,6 +20,15 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = "force-dynamic";
+
+function buildFaviconUrl(url: string | undefined | null): string {
+  try {
+    const hostname = url ? new URL(url).hostname : 'google.com';
+    return `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+  } catch {
+    return 'https://www.google.com/s2/favicons?domain=google.com&sz=64';
+  }
+}
 
 export default async function Home() {
   let newsArticles: NewsArticle[] = [];
@@ -44,32 +52,16 @@ export default async function Home() {
       }
     );
 
-    newsArticles = result.results.map((item, index) => {
-      // Use a placeholder only if absolutely necessary, but preferably empty to trigger the gradient fallback
-      const image = '';
-
-      // Extract hostname for favicon
-      const hostname = (() => {
-        try {
-          return item.url ? new URL(item.url).hostname : 'google.com';
-        } catch {
-          return 'google.com';
-        }
-      })();
-
-      const favicon = `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
-
-      return {
-        id: item.id || `news-${index}`,
-        title: item.title || "Untitled News",
-        summary: item.text ? item.text.slice(0, 200) + "..." : "Click to read more...",
-        text: item.text || "No content available.",
-        url: item.url || '#',
-        publishedDate: item.publishedDate || new Date().toISOString(),
-        image: image,
-        favicon: favicon,
-      };
-    });
+    newsArticles = parseNewsArticles(result.results.map((raw, index) => ({
+      id: raw.id || `news-${index}`,
+      title: raw.title || "Untitled News",
+      summary: raw.text ? `${raw.text.slice(0, 200)}...` : "Click to read more...",
+      text: raw.text || "No content available.",
+      url: raw.url || "#",
+      publishedDate: raw.publishedDate || new Date().toISOString(),
+      image: "",
+      favicon: buildFaviconUrl(raw.url),
+    })));
 
   } catch (error) {
     console.error("Error fetching news from Exa:", error);

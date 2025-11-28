@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { openai } from '@ai-sdk/openai';
 import { formatDataStreamPart, streamText } from 'ai';
-import { NewsArticle } from '@/types/newsArticle';
+import { NewsArticle } from '@/lib/validators/news';
 import redis from '@/modules/redis';
 import { Ratelimit } from '@upstash/ratelimit';
 

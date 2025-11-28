@@ -1,5 +1,5 @@
 import Exa from "exa-js";
-import { NewsArticle } from "@/types/newsArticle";
+import { NewsArticle } from "@/lib/validators/news";
 
 const exa = new Exa(process.env.EXA_API_KEY);
 
